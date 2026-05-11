@@ -72,11 +72,18 @@ class NLEDataUpdateCoordinator(DataUpdateCoordinator[dict[str, NLEDeviceStatus]]
                     status = await self.client.get_device_status(device_id)
                     self._apply_capability_latch(device_id, status)
                     data[device_id] = status
+                except NLEAuthenticationError:
+                    # Let auth errors bubble up so HA can trigger the re-auth
+                    # flow instead of silently logging and continuing.
+                    raise
                 except NLEError as err:
-                    _LOGGER.warning(
+                    # Transient per-device errors (e.g. occasional HTTP 502 from
+                    # the upstream gateway) — keep noise out of the log and let
+                    # the next poll retry. If every device fails this poll we
+                    # still raise UpdateFailed below.
+                    _LOGGER.debug(
                         "Failed to get status for device %s: %s", device_id, err
                     )
-                    # Continue with other devices
 
         except NLEAuthenticationError as err:
             raise ConfigEntryAuthFailed(
