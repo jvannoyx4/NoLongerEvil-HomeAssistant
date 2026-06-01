@@ -65,8 +65,9 @@ A Home Assistant integration for [No Longer Evil](https://nolongerevil.com) - pr
 1. Go to **Settings** > **Devices & Services**
 2. Click **+ Add Integration**
 3. Search for "No Longer Evil"
-4. Enter your API key
-5. (Optional) If you're using a self-hosted instance, enter your custom API URL
+4. Choose how you want to connect:
+   - **No Longer Evil Cloud** — enter your `nle_` API key
+   - **Self-Hosted Server** — enter your server's Control API URL (no API key needed)
 
 ## Entities
 
@@ -113,10 +114,23 @@ You can configure the following options after installation:
 
 ## Self-Hosted Users
 
-If you're running a self-hosted No Longer Evil instance:
+If you're running a self-hosted No Longer Evil server, choose **Self-Hosted Server**
+during setup and point the integration at your server's **Control API**:
 
-1. During setup, enter your custom API base URL
-2. Example: `http://your-server:3000/api/v1`
+1. When adding the integration, select **Self-Hosted Server**
+2. Enter your server's URL on the Control API port (default `8082`), e.g.
+   `http://192.168.1.50:8082`
+   - Use your server's LAN IP, not `localhost`
+   - This is the same host you set as the **Public API URL** when flashing
+3. No API key is required — the Control API is unauthenticated and intended for
+   use on a trusted local network
+
+> **Note:** The self-hosted Control API is a different API from the hosted cloud
+> service (it addresses devices by serial and needs no API key). The integration
+> selects the correct API based on the connection type you pick at setup. The
+> self-hosted server is under active development, so endpoint details may change
+> between server versions. If you also run an MQTT broker, the server can publish
+> Home Assistant MQTT discovery records as an alternative to this integration.
 
 ## Troubleshooting
 

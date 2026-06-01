@@ -9,8 +9,15 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .api import NLEApiClient
-from .const import CONF_API_KEY, CONF_BASE_URL, DEFAULT_BASE_URL, DOMAIN
+from .api import create_client
+from .const import (
+    CONF_API_KEY,
+    CONF_BASE_URL,
+    CONF_HOST_TYPE,
+    DEFAULT_BASE_URL,
+    DOMAIN,
+    HOST_TYPE_CLOUD,
+)
 from .coordinator import NLEDataUpdateCoordinator
 from .exceptions import NLEAuthenticationError, NLEConnectionError
 
@@ -28,11 +35,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up No Longer Evil from a config entry."""
     hass.data.setdefault(DOMAIN, {})
 
-    api_key = entry.data[CONF_API_KEY]
+    host_type = entry.data.get(CONF_HOST_TYPE, HOST_TYPE_CLOUD)
+    api_key = entry.data.get(CONF_API_KEY, "")
     base_url = entry.data.get(CONF_BASE_URL, DEFAULT_BASE_URL)
 
     session = async_get_clientsession(hass)
-    client = NLEApiClient(api_key, session, base_url)
+    client = create_client(host_type, api_key, base_url, session)
 
     try:
         devices = await client.get_devices()

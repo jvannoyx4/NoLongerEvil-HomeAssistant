@@ -7,12 +7,22 @@ DOMAIN: Final = "nolongerevil"
 # Configuration keys
 CONF_API_KEY: Final = "api_key"
 CONF_BASE_URL: Final = "base_url"
+CONF_HOST_TYPE: Final = "host_type"
+
+# Host types — selected at the start of the config flow. "cloud" talks to the
+# hosted No Longer Evil REST API (Bearer nle_ keys); "self_hosted" talks to the
+# unauthenticated Control API exposed by a self-hosted NLE server.
+HOST_TYPE_CLOUD: Final = "cloud"
+HOST_TYPE_SELF_HOSTED: Final = "self_hosted"
 
 # Default values
 DEFAULT_BASE_URL: Final = "https://nolongerevil.com/api/v1"
+# The self-hosted Control API listens on port 8082 by default. The example IP
+# is only a hint for the expected "http://<lan-ip>:8082" format.
+DEFAULT_SELFHOSTED_URL: Final = "http://192.168.1.50:8082"
 DEFAULT_SCAN_INTERVAL: Final = 30  # seconds
 
-# API endpoints
+# Cloud API endpoints
 ENDPOINT_DEVICES: Final = "/devices"
 ENDPOINT_STATUS: Final = "/thermostat/{device_id}/status"
 ENDPOINT_TEMPERATURE: Final = "/thermostat/{device_id}/temperature"
@@ -21,6 +31,13 @@ ENDPOINT_MODE: Final = "/thermostat/{device_id}/mode"
 ENDPOINT_AWAY: Final = "/thermostat/{device_id}/away"
 ENDPOINT_FAN: Final = "/thermostat/{device_id}/fan"
 ENDPOINT_SCHEDULE: Final = "/thermostat/{device_id}/schedule"
+
+# Self-hosted Control API endpoints (port 8082, no authentication). Device is
+# addressed by serial. All control actions go through a single /command verb.
+SH_ENDPOINT_DEVICES: Final = "/api/devices"
+SH_ENDPOINT_STATUS: Final = "/status"
+SH_ENDPOINT_COMMAND: Final = "/command"
+SH_ENDPOINT_SCHEDULE: Final = "/api/schedule"
 
 # HVAC modes mapping
 HVAC_MODE_MAP: Final = {

@@ -12,7 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .api import NLEApiClient, NLEDevice, NLEDeviceStatus
+from .api import NLEClientBase, NLEDevice, NLEDeviceStatus
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
 from .exceptions import NLEAuthenticationError, NLEConnectionError, NLEError
 
@@ -35,7 +35,7 @@ class NLEDataUpdateCoordinator(DataUpdateCoordinator[dict[str, NLEDeviceStatus]]
     def __init__(
         self,
         hass: HomeAssistant,
-        client: NLEApiClient,
+        client: NLEClientBase,
         devices: list[NLEDevice],
         config_entry: ConfigEntry,
     ) -> None:

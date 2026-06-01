@@ -3,14 +3,32 @@
     "step": {
       "user": {
         "title": "Connect to No Longer Evil",
+        "description": "How do you want to connect?",
+        "menu_options": {
+          "cloud": "No Longer Evil Cloud (API key)",
+          "self_hosted": "Self-Hosted Server (local Control API)"
+        }
+      },
+      "cloud": {
+        "title": "Connect to No Longer Evil Cloud",
         "description": "Enter your No Longer Evil API key. You can get an API key from your account settings at https://nolongerevil.com/settings",
         "data": {
           "api_key": "API Key",
-          "base_url": "API Base URL (optional)"
+          "base_url": "API Base URL"
         },
         "data_description": {
           "api_key": "Your No Longer Evil API key (starts with 'nle_')",
-          "base_url": "Only change this if you are using a self-hosted instance"
+          "base_url": "Leave as the default unless you have a custom cloud endpoint"
+        }
+      },
+      "self_hosted": {
+        "title": "Connect to a Self-Hosted Server",
+        "description": "Enter the URL of your self-hosted No Longer Evil server's Control API. This is the same host you used as the Public API URL when flashing, on the Control API port (default 8082). No API key is required.",
+        "data": {
+          "base_url": "Server URL"
+        },
+        "data_description": {
+          "base_url": "For example http://192.168.1.50:8082 — use your server's LAN IP, not localhost"
         }
       },
       "reauth_confirm": {
@@ -23,6 +41,7 @@
     },
     "error": {
       "invalid_auth": "Invalid API key. Please check your credentials.",
+      "invalid_url": "That doesn't look like a valid URL. Use a full address like http://192.168.1.50:8082",
       "cannot_connect": "Unable to connect to the No Longer Evil API. Please check your network connection.",
       "no_devices": "No devices found for this account. Please add a thermostat first.",
       "unknown": "An unexpected error occurred. Please try again."
