@@ -222,6 +222,14 @@ class NLEDeviceStatus:
             # Emergency heat is a safety mode — treat it as heat so HA
             # correctly shows the unit as heating rather than off.
             return "heat"
+        if self.target_temperature_type == "heat" and self.ac_active:
+            # The Nest API can report a stale target_temperature_type while the
+            # equipment state already shows the AC running. Prefer the active
+            # equipment state so Home Assistant does not render cooling as heat.
+            return "cool"
+        if self.target_temperature_type == "cool" and self.heater_active:
+            # Same stale-mode guard in the other direction.
+            return "heat"
         return self.target_temperature_type
 
     @property

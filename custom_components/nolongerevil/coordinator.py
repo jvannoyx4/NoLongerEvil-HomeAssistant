@@ -185,10 +185,15 @@ class NLEDataUpdateCoordinator(DataUpdateCoordinator[dict[str, NLEDeviceStatus]]
         # Persist to config entry data whenever a new True is observed so the
         # latch survives HA restarts and integration reloads.
         needs_persist = False
-        if status.can_cool and not cache["can_cool"]:
+        # Active equipment is strong capability evidence. Some Nest responses
+        # report can_cool/can_heat=False even while that equipment is running.
+        can_cool = status.can_cool or status.ac_active or status.hvac_mode == "cool"
+        can_heat = status.can_heat or status.heater_active or status.hvac_mode == "heat"
+
+        if can_cool and not cache["can_cool"]:
             cache["can_cool"] = True
             needs_persist = True
-        if status.can_heat and not cache["can_heat"]:
+        if can_heat and not cache["can_heat"]:
             cache["can_heat"] = True
             needs_persist = True
         if needs_persist:
