@@ -1,15 +1,17 @@
 # No Longer Evil - Home Assistant Integration
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
-[![GitHub Release](https://img.shields.io/github/release/patricktr/NoLongerEvil-HomeAssistant.svg)](https://github.com/patricktr/NoLongerEvil-HomeAssistant/releases)
-[![License](https://img.shields.io/github/license/patricktr/NoLongerEvil-HomeAssistant.svg)](https://github.com/patricktr/NoLongerEvil-HomeAssistant/blob/main/LICENSE)
+[![GitHub Release](https://img.shields.io/github/release/jvannoyx4/NoLongerEvil-HomeAssistant.svg)](https://github.com/jvannoyx4/NoLongerEvil-HomeAssistant/releases)
+[![License](https://img.shields.io/github/license/jvannoyx4/NoLongerEvil-HomeAssistant.svg)](https://github.com/jvannoyx4/NoLongerEvil-HomeAssistant/blob/main/LICENSE)
 
 A Home Assistant integration for [No Longer Evil](https://nolongerevil.com) - providing local and cloud control of your smart thermostat.
+
+This fork tracks the upstream No Longer Evil integration and includes fixes used in my Home Assistant setup.
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.][my-hacs-badge]][my-hacs-url]
 
 [my-hacs-badge]: https://my.home-assistant.io/badges/hacs_repository.svg
-[my-hacs-url]: https://my.home-assistant.io/redirect/hacs_repository/?owner=patricktr&repository=NoLongerEvil-HomeAssistant&category=integration
+[my-hacs-url]: https://my.home-assistant.io/redirect/hacs_repository/?owner=jvannoyx4&repository=NoLongerEvil-HomeAssistant&category=integration
 
 ## Features
 
@@ -19,6 +21,14 @@ A Home Assistant integration for [No Longer Evil](https://nolongerevil.com) - pr
 - **Away Mode**: Switch to enable/disable away mode for energy savings
 - **Temperature Range**: Support for heat-cool mode with temperature ranges
 - **Multiple Devices**: Support for multiple thermostats per account
+
+## Fork Fixes
+
+### 1.1.1
+
+- Fixed a Home Assistant thermostat card mismatch where the Nest thermostat could display the orange heat UI while the system was actively cooling.
+- When the Nest API reports stale `target_temperature_type` data, the integration now prefers active equipment state (`ac_active` or `heater_active`) for the Home Assistant HVAC mode.
+- Treats active AC/heater state as capability evidence so supported modes such as `cool` do not disappear when the API temporarily reports `can_cool` or `can_heat` incorrectly.
 
 ## Installation
 
@@ -37,7 +47,7 @@ A Home Assistant integration for [No Longer Evil](https://nolongerevil.com) - pr
 2. Click on "Integrations"
 3. Click the three dots in the top right corner
 4. Select "Custom repositories"
-5. Add this repository URL: `https://github.com/patricktr/NoLongerEvil-HomeAssistant`
+5. Add this repository URL: `https://github.com/jvannoyx4/NoLongerEvil-HomeAssistant`
 6. Select "Integration" as the category
 7. Click "Add"
 8. Search for "No Longer Evil" and install it
@@ -45,7 +55,7 @@ A Home Assistant integration for [No Longer Evil](https://nolongerevil.com) - pr
 
 ### Manual Installation
 
-1. Download the latest release from the [releases page](https://github.com/patricktr/NoLongerEvil-HomeAssistant/releases)
+1. Download the latest release from the [releases page](https://github.com/jvannoyx4/NoLongerEvil-HomeAssistant/releases)
 2. Extract the `custom_components/nolongerevil` folder to your Home Assistant `custom_components` directory
 3. Restart Home Assistant
 
@@ -150,6 +160,13 @@ during setup and point the integration at your server's **Control API**:
 - For self-hosted users, ensure your server is reachable
 - The API rate limit is 20 requests per minute for API keys
 
+### Thermostat Shows Heat While Cooling
+
+- Version `1.1.1` fixes a known mismatch where Home Assistant could show the heat UI while the thermostat was actively cooling.
+- Confirm the installed integration version is `1.1.1` or newer.
+- Restart Home Assistant after updating the custom integration so the patched Python module is loaded.
+- If the issue returns, check the climate entity attributes. A healthy cooling state should report `hvac_action: cooling` and `state: cool`.
+
 ### Rate Limiting
 
 The No Longer Evil API has rate limits:
@@ -161,7 +178,8 @@ If you see rate limit errors, increase the scan interval in the integration opti
 ## Support
 
 - [No Longer Evil Documentation](https://docs.nolongerevil.com)
-- [GitHub Issues](https://github.com/patricktr/NoLongerEvil-HomeAssistant/issues)
+- [GitHub Issues](https://github.com/jvannoyx4/NoLongerEvil-HomeAssistant/issues)
+- [Upstream Project](https://github.com/patricktr/NoLongerEvil-HomeAssistant)
 
 ## Contributing
 
