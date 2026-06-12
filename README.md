@@ -24,6 +24,11 @@ This fork tracks the upstream No Longer Evil integration and includes fixes used
 
 ## Fork Fixes
 
+### 1.1.2
+
+- Fixed Home Assistant thermostat cards showing the mode label (`Cool`/`Heat`) in the dial when the Nest API omits the active target temperature.
+- The climate entity now falls back to an available range setpoint, or the current room temperature as a display value, so the thermostat card remains readable.
+
 ### 1.1.1
 
 - Fixed a Home Assistant thermostat card mismatch where the Nest thermostat could display the orange heat UI while the system was actively cooling.
@@ -162,8 +167,8 @@ during setup and point the integration at your server's **Control API**:
 
 ### Thermostat Shows Heat While Cooling
 
-- Version `1.1.1` fixes a known mismatch where Home Assistant could show the heat UI while the thermostat was actively cooling.
-- Confirm the installed integration version is `1.1.1` or newer.
+- Version `1.1.2` fixes missing target temperature display in the thermostat dial when the Nest API omits the active setpoint.
+- Confirm the installed integration version is `1.1.2` or newer.
 - Restart Home Assistant after updating the custom integration so the patched Python module is loaded.
 - If the issue returns, check the climate entity attributes. A healthy cooling state should report `hvac_action: cooling` and `state: cool`.
 

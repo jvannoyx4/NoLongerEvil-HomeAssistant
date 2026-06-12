@@ -150,9 +150,9 @@ class NLEClimate(NLEEntity, ClimateEntity):
         if status is None:
             return None
 
-        # Only return single target temp for heat or cool mode
-        if status.target_temperature_type in ("heat", "cool"):
-            return status.target_temperature
+        # Only return a single display target for heat or cool mode.
+        if self.hvac_mode in (HVACMode.HEAT, HVACMode.COOL):
+            return status.display_target_temperature
         return None
 
     @property

@@ -3,8 +3,8 @@
 Control your No Longer Evil smart thermostat from Home Assistant.
 
 This HACS package is maintained from the `jvannoyx4` fork and includes the
-`1.1.1` thermostat mode fix for cooling systems that were rendered as heat in
-Home Assistant.
+`1.1.2` thermostat display fix for cooling/heating modes where the Nest API
+omits the active target temperature.
 
 ## Features
 

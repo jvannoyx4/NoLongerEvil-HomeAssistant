@@ -243,6 +243,35 @@ class NLEDeviceStatus:
             return "fan"
         return "idle"
 
+    @property
+    def display_target_temperature(self) -> float | None:
+        """Return the best temperature value for Home Assistant's thermostat dial.
+
+        Nest can omit ``target_temperature`` while still reporting a normal
+        heat/cool mode. Home Assistant renders the mode label in the dial when
+        the single target is missing, so prefer range values when available and
+        finally fall back to the current room temperature as a display value.
+        """
+        if self.target_temperature is not None:
+            return self.target_temperature
+
+        mode = self.hvac_mode
+        if mode == "cool" and self.target_temperature_high is not None:
+            return self.target_temperature_high
+        if mode == "heat" and self.target_temperature_low is not None:
+            return self.target_temperature_low
+
+        if (
+            self.target_temperature_low is not None
+            and self.target_temperature_low == self.target_temperature_high
+        ):
+            return self.target_temperature_low
+
+        if mode in ("heat", "cool"):
+            return self.current_temperature
+
+        return None
+
 
 class NLEClientBase:
     """Shared session management for the cloud and self-hosted clients.
