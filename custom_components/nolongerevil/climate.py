@@ -235,10 +235,28 @@ class NLEClimate(NLEEntity, ClimateEntity):
             # Handle single temperature
             temperature = kwargs.get(ATTR_TEMPERATURE)
             if temperature is not None:
-                # Determine mode based on current setting
-                mode = status.target_temperature_type
-                if mode == "range":
-                    mode = "heat"  # Default to heat if in range mode
+                # Determine mode from Home Assistant's normalized HVAC mode,
+                # not the raw Nest target_temperature_type. The raw value can
+                # be stale (for example "heat" while AC is active), and using
+                # it here can flip a cooling setpoint change into heat.
+                mode = status.hvac_mode
+                if mode == "heat-cool":
+                    hvac_mode = kwargs.get("hvac_mode")
+                    if hvac_mode == HVACMode.HEAT:
+                        mode = "heat"
+                    elif hvac_mode == HVACMode.COOL:
+                        mode = "cool"
+                    else:
+                        # Single-temperature writes are only valid for heat or
+                        # cool. Preserve the previous single-mode if available;
+                        # otherwise prefer cooling on cooling-capable systems.
+                        raw_mode = status.target_temperature_type
+                        if raw_mode in ("heat", "cool"):
+                            mode = raw_mode
+                        elif status.can_cool:
+                            mode = "cool"
+                        else:
+                            mode = "heat"
                 await self.coordinator.async_set_temperature(
                     self._device_id, temperature, mode
                 )

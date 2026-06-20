@@ -24,6 +24,10 @@ This fork tracks the upstream No Longer Evil integration and includes fixes used
 
 ## Fork Fixes
 
+### 1.1.4
+
+- Fixed setpoint changes using stale raw Nest mode data. Raising a cooling setpoint now keeps the thermostat in cool mode instead of accidentally sending a heat-mode setpoint.
+
 ### 1.1.3
 
 - Fixed the target temperature sensor exposing a stale raw Nest mode (`heat`) while the thermostat is actively cooling.
