@@ -24,6 +24,11 @@ This fork tracks the upstream No Longer Evil integration and includes fixes used
 
 ## Fork Fixes
 
+### 1.1.3
+
+- Fixed the target temperature sensor exposing a stale raw Nest mode (`heat`) while the thermostat is actively cooling.
+- The target temperature sensor now uses the same normalized HVAC mode and display target temperature as the climate entity.
+
 ### 1.1.2
 
 - Fixed Home Assistant thermostat cards showing the mode label (`Cool`/`Heat`) in the dial when the Nest API omits the active target temperature.

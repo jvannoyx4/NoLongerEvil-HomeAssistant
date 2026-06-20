@@ -90,7 +90,7 @@ class NLETargetTemperatureSensor(NLEEntity, SensorEntity):
         status = self.device_status
         if status is None:
             return None
-        return status.target_temperature
+        return status.display_target_temperature
 
     @property
     def extra_state_attributes(self) -> dict[str, any] | None:
@@ -100,7 +100,8 @@ class NLETargetTemperatureSensor(NLEEntity, SensorEntity):
             return None
 
         attrs = {
-            "mode": status.target_temperature_type,
+            "mode": status.hvac_mode,
+            "raw_mode": status.target_temperature_type,
         }
 
         if status.target_temperature_type == "range":
